@@ -22,7 +22,7 @@ cp -R "$OUT/DerivedData/Build/Products/Release-iphoneos/ProxyToggle.app" "$OUT/P
 ldid -S"$ENTITLEMENTS" "$OUT/Payload/ProxyToggle.app/ProxyToggle"
 (cd "$OUT" && zip -qry ProxyToggle.tipa Payload)
 
-xcrun -sdk iphoneos swiftc -target arm64-apple-ios17.0 -O \
+xcrun -sdk iphoneos swiftc -target arm64-apple-ios16.0 -O \
   Sources/Shared/*.swift Tools/proxyctl/main.swift -o "$OUT/proxyctl"
 ldid -S"$ENTITLEMENTS" "$OUT/proxyctl"
 

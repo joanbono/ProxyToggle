@@ -16,14 +16,16 @@ SwiftUI app for jailbroken / TrollStore iOS devices that sets the system HTTP(S)
 
 ## Compatibility
 
+The app supports **iOS 16.0 and later** (deployment target 16.0, built with the iOS 27 SDK).
+
 | iOS | Status |
 |---|---|
 | 17.5.1 (iPad 6th gen, palera1n rootful + TrollStore) | Tested |
-| 17.0 – 17.x | Expected to work |
-| 18.x | Untested; should work where TrollStore or a jailbreak is available |
-| 16.x and earlier | Not supported by this build (deployment target is iOS 17.0) |
+| 16.x, 17.x | Expected to work |
+| 18.x, 26.x, 27.x | Builds and should run, untested; limited by TrollStore and jailbreak availability |
+| 15.x and earlier | Not supported |
 
-Installing requires **TrollStore**, because the app needs private entitlements. TrollStore installs natively on iOS 14.0 – 16.6.1 and 17.0. On later versions it needs a jailbreak; for example, palera1n on checkm8 devices (A8 – A11) can install the TrollStore helper.
+Installing requires **TrollStore**, because the app needs private entitlements. TrollStore installs natively on iOS 14.0 – 16.6.1 and 17.0. On later versions it needs a jailbreak; for example, palera1n on checkm8 devices (A8 – A11) can install the TrollStore helper. On versions with neither, the app cannot be installed with its entitlements.
 
 Rootful and rootless jailbreaks both work: the app does not touch `/var/jb`.
 
@@ -35,7 +37,7 @@ Rootful and rootless jailbreaks both work: the app does not touch `/var/jb`.
 
 ## How it works
 
-iOS 17 keeps one SystemConfiguration *Set* per Wi-Fi SSID in `/var/preferences/SystemConfiguration/preferences.plist`, each with its own `Proxies` dictionary. ProxyToggle writes the Wi-Fi and Ethernet services of every Set (or only the current one). Cellular and VPN services are left unchanged.
+iOS keeps one SystemConfiguration *Set* per Wi-Fi SSID (verified on iOS 17) in `/var/preferences/SystemConfiguration/preferences.plist`, each with its own `Proxies` dictionary. ProxyToggle writes the Wi-Fi and Ethernet services of every Set (or only the current one). Cellular and VPN services are left unchanged.
 
 The SCPreferences API is marked unavailable in the iOS SDK, but the symbols ship in the iOS SystemConfiguration binary, so they are resolved with `dlsym`. The session is created with `SCPreferencesCreateWithAuthorization(..., kSCPreferencesUseEntitlementAuthorization)`. This makes configd's helper perform the write on behalf of a process holding the `com.apple.SystemConfiguration.SCPreferences-write-access` entitlement (see `ProxyToggle.entitlements`). Without that authorization, `SCPreferencesLock` fails with error 1003 when the app is not running as root.
 
