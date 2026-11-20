@@ -12,6 +12,7 @@ struct ContentView: View {
                 profilesSection
                 networksSection
             }
+            .safeAreaInset(edge: .bottom, spacing: 0) { credits }
             .navigationTitle("ProxyToggle")
             .toolbar {
                 Button { model.refresh() } label: {
@@ -109,6 +110,17 @@ struct ContentView: View {
             }
         }
     }
+
+    private var credits: some View {
+        Text("Version \(Self.version) — vibe-coded with ♥ from Andorra")
+            .font(.system(size: 10))
+            .foregroundStyle(.tertiary)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 4)
+            .background(Color(uiColor: .systemGroupedBackground))
+    }
+
+    private static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
 
     private var networksSection: some View {
         Section {
